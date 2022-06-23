@@ -2,7 +2,10 @@
 title: "simChef culinary school `r emo::ji('fried_egg')`"
 subtitle: "Cooking up reliable simulations in R"
 author: "James Duncan"
-date: "2022/06/23"
+institute: |
+    for ![Genentech](images/gene.svg)
+date: |
+    2022/06/23
 output:
   xaringan::moon_reader:
     # self_contained: true
@@ -22,7 +25,8 @@ class: hide_logo
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
 xaringanthemer::style_mono_accent(
   # base_color = "#00b0da",
-  base_color = "#008878",
+  # base_color = "#008878",
+  base_color = "#005596",
   header_font_google = xaringanthemer::google_font("Josefin Sans"),
   text_font_google = xaringanthemer::google_font("Montserrat", "300", "300i"),
   code_font_google = xaringanthemer::google_font("Fira Mono"),
@@ -79,7 +83,35 @@ devtools::install_github("Yu-Group/simChef")
 .fl.w-20.f6[C.F. Elliott]
 .fl.w-20.f6[P. Boileau]
 .fl.w-20.f6[B. Yu]
+]<br />
+
+---
+count: false
+
+.center.hex-logo[![simChef hexagon logo](images/simChef-hex-v2.png)]
+
+.center[
+```r
+devtools::install_github("Yu-Group/simChef")
+```
 ]
+
+.center.faces[
+.fl.w-20[<img src="images/james.jpg" alt="James Duncan" class="center">]
+.fl.w-20[<img src="images/Tiffany.jpg" alt="Tiffany Tang" class="center">]
+.fl.w-20[<img src="images/corrine.jpg" alt="Corrine F. Elliott" class="center">]
+.fl.w-20[<img src="images/phil.jpg" alt="Philippe Boileau" class="center">]
+.fl.w-20[<img src="images/Bin.jpg" alt="Bin Yu" class="center">]
+]
+.center.faces[
+.fl.w-20.f6[<strong class="gene-color">J. Duncan</strong>]
+.fl.w-20.f6[<strong class="gene-color">T. Tang</strong>]
+.fl.w-20.f6[C.F. Elliott]
+.fl.w-20.f6[<strong class="gene-color">P. Boileau</strong>]
+.fl.w-20.f6[<strong class="gene-color">B. Yu</strong>]
+]
+
+80% <strong class="gene-color">Genentech</strong> alumni!
 
 ---
 
@@ -89,12 +121,18 @@ devtools::install_github("Yu-Group/simChef")
 
 --
 class: no-animation
-- Primary abstractions in `R6`
+
+- Why we created `simChef`
+
+--
+- Core abstractions in `R6`
+
+--
+
+### 2. Dive into `simChef`'s features (~30-40 min)
 
 --
 - Tidyverse-like "grammar of simulations"
-
-### 2. Hands-on tutorial (~30-40 min)
 
 --
 - Inputs and outputs of your functions
@@ -182,6 +220,8 @@ environments and they should be **easy to share**.
 # Core abstractions
 
 We use [`R6`](https://r6.r-lib.org/index.html) to encompass these simulation components:
+
+--
 
 `simChef::DGP`
 
@@ -445,30 +485,189 @@ run_experiment(my_exp) # reps + eval + viz
 ```
 
 ---
+# Running and debugging
+
+You can find a similar example at https://yu-group.github.io/simChef/articles/parallel.html
+
+Required packages: `simChef`, `glmnet`, `MASS`.
+
+--
+Some slightly more interesting `DGP` functions:
+
+```{r}
+dense_dgp_fun <- function(n=100, rho=0.5, noise_level=1) {
+  cov_mat <- diag(nrow = 5)
+  cov_mat[cov_mat == 0] <- rho
+  X <- MASS::mvrnorm(n = n, mu = rep(0, 5), Sigma = cov_mat)
+  y <- cbind(1, X) %*% c(-8, 3, -1, 0.1, 0.5, 1) + rnorm(n, sd = noise_level)
+  return(list(X = X, y = y, coeff = c(3, -1, 0.1, 0.01, 0.001)))
+}
+```
+
+--
+```{r}
+sparse_dgp_fun <- function(n=100, d=100, rho=0.5, sparsity=0.5, noise_level=1,
+                           nonzero_coeff = c(-3, -1, 1, 3)) {
+  cov_mat <- diag(nrow = d)
+  cov_mat[cov_mat == 0] <- rho
+  X <- MASS::mvrnorm(n = n, mu = rep(0, d), Sigma = cov_mat)
+  coeff_prob <- c(sparsity, rep((1 - sparsity) / 4, times = 4))
+  coeff <- c(
+    -8, # intercept
+    sample(
+      c(0, nonzero_coeff), size = d, replace = TRUE,
+      prob = coeff_prob
+    )
+  )
+  y <- cbind(1, X) %*% coeff + rnorm(n, sd = noise_level)
+  return(list(X = X, y = y, coeff = coeff[-1]))
+}
+```
+
+---
+
+# Running and debugging
+
+Some slightly more interesting `Method` functions:
+
+```{r}
+ols <- function(X, y, ...) {
+  fit <- lm(y ~ X)
+  return(c(list(fit = fit), list(...)))
+}
+
+elnet <- function(X, y, alpha=1, lambda=0.1, ...) {
+  fit <- glmnet::glmnet(
+    x = X, y = y, family = "gaussian", alpha = alpha, lambda=lambda
+  )
+  if (alpha == 0.1) {
+    stop("uh oh!")
+  }
+  return(c(list(fit = fit), list(...)))
+}
+```
+
+---
+# Running and debugging
+
+```{r}
+dense_dgp <- create_dgp(dense_dgp_fun)
+
+sparse_dgp <- create_dgp(sparse_dgp_fun)
+
+ols_method <- create_method(ols)
+
+elnet_method <- create_method(elnet)
+```
+
+--
+```{r}
+experiment <- create_experiment(
+  name = "exper", future.packages = "dplyr",
+  dgp_list = list("dense" = dense_dgp,
+                  "sparse" = sparse_dgp),
+  method_list = list("ols" = ols_method,
+                     "elnet" = elnet_method)) %>%
+  add_vary_across(
+    .dgp = "sparse",
+    n = c(100, 500, 1000),
+    nonzero_coeff = list(c(-3, -1, 1, 3), c(-0.3, -0.1, 0.1, 0.3))
+  ) %>%
+  add_vary_across(
+    .method = "elnet", alpha = c(0, 0.25, 0.5, 0.75, 1)
+  )
+
+experiment
+```
+
+---
+# Running and debugging
+
+```{r, cache=TRUE}
+n_cores <- future::availableCores(methods = "system")
+n_cores
+
+future::plan(future::multisession, workers = n_cores - 1)
+
+results <- run_experiment(experiment, n_reps = 3)
+results
+```
+
+---
+# Running and debugging
+
+```{r}
+experiment %>%
+  update_vary_across(.method = "elnet",
+                     alpha = 0.1)
+```
+
+--
+```{r, error=TRUE}
+results <- run_experiment(experiment, n_reps = 3)
+```
+
+--
+```{r}
+rlang::last_error()$partial_results
+```
+
+---
+class: hide_logo
+
+# `dgpoix` `r emo::ji("carrot")`
+### A reusable library of DGPs
+[github.com/Yu-Group/dgpoix](https://github.com/Yu-Group/dgpoix)
+ ("*dee-gee-pwaa*", rhymes with "mirepoix")
+
+--
+
+DGPs are the key **ingredients** of every simulation.
+
+
+--
+
+`dgpoix` allows us to quickly create interesting DGPs from modular components.
+
+--
+
+```{r, eval=FALSE}
+linear_gaussian_dgp <- simChef::create_dgp(
+  dgpoix::linear_gaussian_dgp,
+  # params for linear_gaussian_dgp:
+  n = 100, p_obs = 3, intercept = 1, err = rnorm
+  # dgpoix::coef_sampler function and its params:
+  betas = dgpoix::coef_sampler,
+  coefs = c(0, 0.5, 1), probs = c(0.5, 0.3, 0.2)
+)
+```
+
+--
+
+```{r, eval=FALSE}
+custom_dgp <- simChef::create_dgp(
+  dgpoix::xy_dgp_constructor,
+  # params for linear_gaussian_dgp:
+  X_fun = my_custom_X_fun,
+  y_fun = my_custom_y_fun,
+  err_fun = my_custom_err_fun,
+  .X_p = 20, # args specific to X
+  .y_p = 2,
+  # err_fun args have no overlap with X_fun or y_fun
+  n_blocks = 3,
+  rho = c(0, 0.4, 0.8)
+)
+```
+
+--
+
+`dgpoix` is currently in very early development, so expect the API to change.
+
+---
 exclude: true
 
 # DGPs
 
-User's can write their own custom DGP functions.
-
-```{r, eval=FALSE}
-my_linear_gaussian_dgp_fun <- function(n, p) {
-
-  ## generate covariate matrix
-  X <- matrix(rnorm(n = n*p), nrow = n)
-
-  ## sample linear model coefficients
-  betas <- sample(
-    c(0, 0.5, 1), size = p,
-    replace = TRUE, prob = c(0.5, 0.3, 0.2)
-  )
-
-  ## create a linear response y with additive gaussian noise
-  y <- cbind(1, X) %*% c(1, betas) + rnorm(n)
-
-  return(list(X = X, y = y, betas = betas))
-}
-```
 
 ---
 exclude: true
@@ -497,30 +696,6 @@ simChef::list_to_tibble_row(
    <list>           <list>          <list>
  1 <dbl [100 × 3]>  <dbl [100 × 1]> <dbl [3]>
 ```
-
----
-exclude: true
-
-# `dgpoix` `r emo::ji("carrot")` A reusable library of DGPs
-
-DGPs are the key **ingredients** of every simulation.
-
-We can quickly recreate the last example using `dgpoix`.
-
-(Pronounced "dee-gee-pwaa", rhymes with "mirepoix").
-
-```{r, eval=FALSE}
-linear_gaussian_dgp <- create_dgp(
-  dgpoix::linear_gaussian_dgp,
-  # params for linear_gaussian_dgp:
-  n = 100, p_obs = 3, intercept = 1, err = rnorm
-  # dgpoix::coef_sampler function and its params:
-  betas = dgpoix::coef_sampler,
-  coefs = c(0, 0.5, 1), probs = c(0.5, 0.3, 0.2)
-)
-```
-
-`dgpoix` is currently in very early development, so expect the API to change.
 
 ---
 exclude: true
@@ -597,6 +772,29 @@ Let's take a look at an the output of an example simulation project: [github.com
 class: no-padding
 
 <iframe src="ex/empirical-fdr-comparison.html" width=100% height=100%></iframe>
+
+---
+
+# Roadmap of ongoing and future work
+
+In approximate order of priority.
+
+--
+- Ongoing usability improvements for `simChef`
+
+--
+- Much more work on `dgpoix`
+
+--
+- Nested parallelism, e.g.: 
+
+```{r eval=FALSE}
+future::plan(future.batchtools::batchtools_slurm,
+             future::multisession)
+```
+
+--
+- Your requests? [github.com/Yu-Group/simChef/issues](https://github.com/Yu-Group/simChef/issues)
 
 ---
 
