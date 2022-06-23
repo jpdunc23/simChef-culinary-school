@@ -2,7 +2,7 @@
 
 ## Cooking up reliable simulations in R
 
-- [Slides](https://jpdunc23.github.io/simChef-talk/slides/slides.html)
+- [Slides](https://jpdunc23.github.io/simChef-culinary-school/slides/slides.html)
 - [Repo](https://github.com/Yu-Group/simChef)
 - [Docs](https://yu-group.github.io/simChef/)
 - [Example simulation](https://github.com/PhilBoileau/simChef-case-study)
