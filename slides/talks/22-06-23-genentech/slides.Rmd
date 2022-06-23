@@ -2,6 +2,8 @@
 title: "simChef culinary school `r emo::ji('fried_egg')`"
 subtitle: "Cooking up reliable simulations in R"
 author: "James Duncan"
+institute: |
+    for ![Genentech](images/gene.svg)
 date: |
     2022/06/23
 output:
@@ -82,6 +84,34 @@ devtools::install_github("Yu-Group/simChef")
 .fl.w-20.f6[P. Boileau]
 .fl.w-20.f6[B. Yu]
 ]<br />
+
+---
+count: false
+
+.center.hex-logo[![simChef hexagon logo](images/simChef-hex-v2.png)]
+
+.center[
+```r
+devtools::install_github("Yu-Group/simChef")
+```
+]
+
+.center.faces[
+.fl.w-20[<img src="images/james.jpg" alt="James Duncan" class="center">]
+.fl.w-20[<img src="images/Tiffany.jpg" alt="Tiffany Tang" class="center">]
+.fl.w-20[<img src="images/corrine.jpg" alt="Corrine F. Elliott" class="center">]
+.fl.w-20[<img src="images/phil.jpg" alt="Philippe Boileau" class="center">]
+.fl.w-20[<img src="images/Bin.jpg" alt="Bin Yu" class="center">]
+]
+.center.faces[
+.fl.w-20.f6[<strong class="gene-color">J. Duncan</strong>]
+.fl.w-20.f6[<strong class="gene-color">T. Tang</strong>]
+.fl.w-20.f6[C.F. Elliott]
+.fl.w-20.f6[<strong class="gene-color">P. Boileau</strong>]
+.fl.w-20.f6[<strong class="gene-color">B. Yu</strong>]
+]
+
+80% <strong class="gene-color">Genentech</strong> alumni!
 
 ---
 
