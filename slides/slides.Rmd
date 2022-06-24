@@ -2,13 +2,14 @@
 title: "simChef culinary school `r emo::ji('fried_egg')`"
 subtitle: "Cooking up reliable simulations in R"
 author: "James Duncan"
-date: |
-    2022/06/23
+institute: |
+  UC Berkeley
+date: 2022/06/24
 output:
   xaringan::moon_reader:
     # self_contained: true
     lib_dir: libs # path to local remark.js library
-    css: [css/xaringan-themer.css, css/my-style.css]
+    css: [css/xaringan-themer.css, css/culinary.css]
     nature:
       highlightLanguage: r
       highlightStyle: googlecode
@@ -60,6 +61,11 @@ xaringanExtra::use_logo(
 ```{r xaringan-extra-animate-all, echo=FALSE}
 xaringanExtra::use_animate_all("fade")
 ```
+
+```{r include=FALSE}
+library(simChef)
+```
+
 .center.hex-logo[![simChef hexagon logo](images/simChef-hex-v2.png)]
 
 .center[
