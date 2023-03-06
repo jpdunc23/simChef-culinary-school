@@ -17,9 +17,12 @@
 
 ## Workflow when using these slides
 
-1. Fork this repo.
-1. Update `slides/slides.Rmd` for your presentation (`xaringan::inf_mr()` is
-   helpful for local rendering as you develop your changes).
+1. Fork this repo and clone your fork.
+1. Install `renv` and run `renv::restore()` to install dependencies from
+   the `renv.lock` file provided with this repo.
+1. Update `slides/slides.Rmd` for your presentation
+   (`xaringan::inf_mr(slides/slides.Rmd)` is helpful for local rendering as you
+   develop your changes).
 1. In your fork, enable GitHub Pages with `/` selected as the source folder.
    You'll be able to find your presentation at
    `<your-username>.github.io/simChef-culinary-school/slides/slides.html`.
