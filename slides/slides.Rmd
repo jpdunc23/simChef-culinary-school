@@ -1,10 +1,10 @@
 ---
 title: "simChef culinary school `r emo::ji('fried_egg')`"
 subtitle: "Cooking up reliable simulations in R"
-author: "James Duncan"
+author: "James Duncan, Tiffany Tang"
 institute: |
   UC Berkeley
-date: 2022/06/24
+date: 2023/03/06
 output:
   xaringan::moon_reader:
     # self_contained: true
@@ -164,32 +164,97 @@ experiments, with PCS as the guiding framework.
 
 ---
 
-# Goals
+# A simulation with MERITS
 
-**Transparent**
-* Scientific question **clearly defined** and communicated **honestly**.
-
---
-
-**Realistic**
-* Synthetic data should resemble the **real world** and should use **real data**
-as much as possible.
+<span style="font-size: 32pt; font-family: bold">**M**</span>**odular**: 
+written in **self-contained** and **logically partitioned** segments of code.
 
 --
 
-**Intuitive**
-* Simulation code should be **readable** and **understandable**.
+<span style="font-size: 32pt; font-family: bold">**E**</span>**fficient**:
+**computationally** and **conceptually** streamlined.
 
 --
 
-**Efficient**
-* Simulations should take advantage of **distributed computation**.
+<span style="font-size: 32pt; font-family: bold">**R**</span>**ealistic**:
+**faithful** to the **natural world** or **realm of application**, to the best extent allowed by established theory and/or available real-world data.
 
 --
 
-**Reproducible**
-* Results should be **consistent** across runs, users, and computing
-environments and they should be **easy to share**.
+<span style="font-size: 32pt; font-family: bold">**I**</span>**ntuitive**:
+**sensible** to both the intended audience and a **broad range** of potential consumers, across all parts of the research product: simulation architecture, documentation, code, and analysis of results.
+
+--
+
+<span style="font-size: 32pt; font-family: bold">**T**</span>**ransparent**:
+documented **thoroughly** and **candidly**.
+
+--
+
+<span style="font-size: 32pt; font-family: bold">**S**</span>**table**:
+**reproducible/replicable**, and (potentially) **generalizable** beyond the scope of the simulation.
+
+---
+
+# The `simChef` Vision
+
+- Versatile **R framework** to support simulation studies satisfying these MERITS
+
+--
+
+- Allow data scientists to focus on substantive questions with **fewer technical distractions**
+
+--
+
+- **Lower** the **activation barrier** to running high-quality simulation studies
+
+--
+
+- Provide comprehensive simulation **documentation and archive** of simulation artifacts for **transparency and reproducibility**
+
+---
+
+# `simChef` Highlights
+
+- An **intuitive grammar** for simulation studies
+
+--
+
+- Automated **documentation** and **visualization** of results
+
+--
+
+- **Caching** of results
+
+--
+
+- Ease of **parallelization**
+
+--
+
+- **Debugging** tools
+
+---
+
+# An intuitive grammar for simulation studies
+
+```{r, eval=FALSE}
+# create experiment
+my_exper <- create_experiment(name = "Experiment") %>%
+  add_dgp(my_dgp, name = "DGP1") %>%
+  add_method(my_method, name = "Method1") %>%
+  add_evaluator(my_evaluator, name = "Eval1") %>%
+  add_visualizer(my_visualizer, name = "Viz1") %>%
+  add_vary_across(.dgp = "DGP1",
+                  n = c(10, 100, 1000))
+
+# run experiment
+my_results <-  run_experiment(my_exper, n_reps = 25)
+
+# document and visualize experiment results
+create_doc_template(my_exper)
+render_docs(my_exper)
+```
 
 ---
 
@@ -199,33 +264,33 @@ We use [`R6`](https://r6.r-lib.org/index.html) to encompass these simulation com
 
 --
 
-`simChef::DGP`
+**`simChef::DGP`**
 
-.inset.ml2[Data-generating processes which define the “ground truth” and flexibly generate simulated data.]
-
---
-
-`simChef::Method`
-
-.inset.ml2[The main objects of study (your method), along with competitors / baselines.]
+.inset.ml3[Data-generating processes which define the “ground truth” and flexibly generate simulated data.]
 
 --
 
-`simChef::Evaluator`
+**`simChef::Method`**
 
-.inset.ml2[Produce meaningful summaries of the results.]
-
---
-
-`simChef::Visualizer`
-
-.inset.ml2[Output plots, tables, R Markdown, LaTeX, etc. to populate interactive experiment documentation.]
+.inset.ml3[The main objects of study (your method), along with competitors / baselines.]
 
 --
 
-`simChef::Experiment`
+**`simChef::Evaluator`**
 
-.inset.ml2[Puts together all of the above.]
+.inset.ml3[Produce meaningful summaries of the results.]
+
+--
+
+**`simChef::Visualizer`**
+
+.inset.ml3[Output plots, tables, R Markdown, LaTeX, etc. to populate interactive experiment documentation.]
+
+--
+
+**`simChef::Experiment`**
+
+.inset.ml3[Puts together all of the above.]
 
 ---
 
@@ -278,7 +343,8 @@ my_data <- my_dgp$generate(3)
 str(my_data)
 
 my_method <- create_method( # or Method$new(...)
-  function(x) mean(x), "my-method")
+  function(x) mean(x), "my-method"
+)
 ```
 
 ---
@@ -307,7 +373,16 @@ my_results
 
 ```{r, eval=FALSE}
 my_exper <- create_experiment( # or Experiment$new(...)
-  name = "my-exper")
+  name = "my-exper"
+)
+```
+
+---
+
+# A grammar of replicates
+
+```{r, eval=FALSE}
+my_exper <- create_experiment(name = "my-exper")
 ```
 
 ---
@@ -316,8 +391,7 @@ count: false
 # A grammar of replicates
 
 ```{r, eval=FALSE}
-my_exper <- create_experiment( # or Experiment$new(...)
-  name = "my-exper") %>%
+my_exper <- create_experiment(name = "my-exper") %>%
   add_dgp(my_dgp)
 ```
 
@@ -327,8 +401,7 @@ count: false
 # A grammar of replicates
 
 ```{r, eval=FALSE}
-my_exper <- create_experiment( # or Experiment$new(...)
-  name = "my-exper") %>%
+my_exper <- create_experiment(name = "my-exper") %>%
   add_dgp(my_dgp) %>%
   add_method(my_method)
 ```
@@ -339,8 +412,20 @@ count: false
 # A grammar of replicates
 
 ```{r, eval=TRUE}
-my_exper <- create_experiment( # or Experiment$new(...)
-  name = "my-exper") %>%
+my_exper <- create_experiment(name = "my-exper") %>%
+  add_dgp(my_dgp) %>%
+  add_method(my_method) %>%
+  add_vary_across(.dgp = my_dgp,
+                  n = c(10, 100, 1000))
+```
+
+---
+count: false
+
+# A grammar of replicates
+
+```{r, eval=TRUE}
+my_exper <- create_experiment(name = "my-exper") %>%
   add_dgp(my_dgp) %>%
   add_method(my_method) %>%
   add_vary_across(.dgp = my_dgp,
@@ -354,15 +439,15 @@ count: false
 # A grammar of replicates
 
 ```{r, eval=FALSE}
-my_exper <- create_experiment( # or Experiment$new(...)
-  name = "my-exper") %>%
+my_exper <- create_experiment(name = "my-exper") %>%
   add_dgp(my_dgp) %>%
   add_method(my_method) %>%
   add_vary_across(.dgp = my_dgp,
                   n = c(10, 100, 1000))
 
-my_results <- fit_experiment(
-  my_exper, n_reps = 25) # or my_exper$fit(...)
+my_results <- fit_experiment( # or my_exper$fit(...)
+  my_exper, n_reps = 25
+)
 ```
 
 ---
@@ -371,15 +456,15 @@ count: false
 # A grammar of replicates
 
 ```{r, cache=TRUE}
-my_exper <- create_experiment( # or Experiment$new(...)
-  name = "my-exper") %>%
+my_exper <- create_experiment(name = "my-exper") %>%
   add_dgp(my_dgp) %>%
   add_method(my_method) %>%
   add_vary_across(.dgp = my_dgp,
                   n = c(10, 100, 1000))
 
-my_results <- fit_experiment(
-  my_exper, n_reps = 25) # or my_exper$fit(...)
+my_results <- fit_experiment( # or my_exper$fit(...)
+  my_exper, n_reps = 25
+)
 my_results
 ```
 
@@ -457,7 +542,7 @@ my_exper %>%
   add_evaluator(my_eval, "my-eval") %>%
   add_visualizer(my_viz, "my-viz")
 
-run_experiment(my_exp) # reps + eval + viz
+run_experiment(my_exper) # reps + eval + viz
 ```
 
 ---
@@ -482,7 +567,8 @@ dense_dgp_fun <- function(n=100, rho=0.5, noise_level=1) {
 
 --
 ```{r}
-sparse_dgp_fun <- function(n=100, d=100, rho=0.5, sparsity=0.5, noise_level=1,
+sparse_dgp_fun <- function(n=100, d=100, rho=0.5, 
+                           sparsity=0.5, noise_level=1,
                            nonzero_coeff = c(-3, -1, 1, 3)) {
   cov_mat <- diag(nrow = d)
   cov_mat[cov_mat == 0] <- rho
@@ -539,11 +625,12 @@ elnet_method <- create_method(elnet)
 --
 ```{r}
 experiment <- create_experiment(
-  name = "exper", future.packages = "dplyr",
-  dgp_list = list("dense" = dense_dgp,
-                  "sparse" = sparse_dgp),
-  method_list = list("ols" = ols_method,
-                     "elnet" = elnet_method)) %>%
+  name = "exper", future.packages = "dplyr"
+) %>%
+  add_dgp(dense_dgp, "dense") %>%
+  add_dgp(sparse_dgp, "sparse") %>%
+  add_method(ols_method, "ols") %>%
+  add_method(elnet_method, "elnet") %>%
   add_vary_across(
     .dgp = "sparse",
     n = c(100, 500, 1000),
@@ -563,6 +650,7 @@ experiment
 n_cores <- future::availableCores(methods = "system")
 n_cores
 
+# run in parallel
 future::plan(future::multisession, workers = n_cores - 1)
 
 results <- run_experiment(experiment, n_reps = 3)
@@ -587,6 +675,35 @@ results <- run_experiment(experiment, n_reps = 3)
 ```{r}
 rlang::last_error()$partial_results
 ```
+
+---
+
+# Automated R Markdown Documentation
+
+**Rapid** and **convenient** reporting of *results*
+
+**Transparent** and **organized** communication of the *simulation design + code*
+
+--
+
+One line of code:
+
+```r
+render_docs(my_expr)
+```
+
+--
+![Interactive R Markdown simulation documentation](ex/simchef.gif)
+
+--
+
+Let's take a look at an the output of an example simulation project: [github.com/PhilBoileau/simChef-case-study](https://github.com/PhilBoileau/simChef-case-study)
+
+---
+class: no-padding
+
+<iframe src="ex/empirical-fdr-comparison.html" width=100% height=100%></iframe>
+
 
 ---
 class: hide_logo
@@ -723,34 +840,6 @@ results <- fit_experiment(experiment, n_reps = 100)
 
 ---
 
-# Automated R Markdown Documentation
-
-**Rapid** and **convenient** reporting of *results*
-
-**Transparent** and **organized** communication of the *simulation design + code*
-
---
-
-One line of code:
-
-```r
-create_rmd(my_expr)
-```
-
---
-![Interactive R Markdown simulation documentation](ex/simchef.gif)
-
---
-
-Let's take a look at an the output of an example simulation project: [github.com/PhilBoileau/simChef-case-study](https://github.com/PhilBoileau/simChef-case-study)
-
----
-class: no-padding
-
-<iframe src="ex/empirical-fdr-comparison.html" width=100% height=100%></iframe>
-
----
-
 # Roadmap of ongoing and future work
 
 In approximate order of priority.
@@ -791,7 +880,7 @@ Ex. simulation docs: [https://tinyurl.com/f4ctrw7p](https://philboileau.github.i
 
 <h2 style="text-align: center;">Let us know what you think!</h2>
 
-*For development of your own Rmd-generated html documents, check out: [github.com/Yu-Group/vthemes](https://github.com/Yu-Group/vthemes)
+*For development of your own Rmd-generated html documents (and nice Rmd and ggplot themes), check out: [github.com/Yu-Group/vthemes](https://github.com/Yu-Group/vthemes)
 
 ---
 class: hide_logo
