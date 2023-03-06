@@ -167,73 +167,72 @@ experiments, with PCS as the guiding framework.
 # A simulation with MERITS
 
 <span style="font-size: 32pt; font-family: bold">**M**</span>**odular**: 
-code and design should be divided into **logical**, **reusable** parts.
+written in **self-contained** and **logically partitioned** segments of code.
 
 --
 
 <span style="font-size: 32pt; font-family: bold">**E**</span>**fficient**:
-simulations should take advantage of **distributed computation**.
+**computationally** and **conceptually** streamlined.
 
 --
 
 <span style="font-size: 32pt; font-family: bold">**R**</span>**ealistic**:
-simulations should resemble the **real world** as much as possible.
+**faithful** to the **natural world** or **realm of application**, to the best extent allowed by established theory and/or available real-world data.
 
 --
 
 <span style="font-size: 32pt; font-family: bold">**I**</span>**ntuitive**:
-simulation architecture should be **readable** and **understandable**.
+**sensible** to both the intended audience and a **broad range** of potential consumers, across all parts of the research product: simulation architecture, documentation, code, and analysis of results.
 
 --
 
 <span style="font-size: 32pt; font-family: bold">**T**</span>**ransparent**:
-goals should be **clearly defined**; results communicated **honestly**.
+documented **thoroughly** and **candidly**.
 
 --
 
 <span style="font-size: 32pt; font-family: bold">**S**</span>**table**:
-simulations should be **consistent** (e.g., over seeds) and **reproducible**.
+**reproducible/replicable**, and (potentially) **generalizable** beyond the scope of the simulation.
 
 ---
 
 # The `simChef` Vision
 
-
-* Versatile **R framework** to support simulation studies satisfying these MERITS
-
---
-
-* Allow data scientists to focus on substantive questions with **fewer technical distractions**
+- Versatile **R framework** to support simulation studies satisfying these MERITS
 
 --
 
-* **Lower** the **activation barrier** to running high-quality simulation studies
+- Allow data scientists to focus on substantive questions with **fewer technical distractions**
 
 --
 
-* Provide comprehensive simulation **documentation and archive** of simulation artifacts for **transparency and reproducibility**
+- **Lower** the **activation barrier** to running high-quality simulation studies
+
+--
+
+- Provide comprehensive simulation **documentation and archive** of simulation artifacts for **transparency and reproducibility**
 
 ---
 
 # `simChef` Highlights
 
-* An **intuitive grammar** for simulation studies
+- An **intuitive grammar** for simulation studies
 
 --
 
-* Automated **documentation** and **visualization** of results
+- Automated **documentation** and **visualization** of results
 
 --
 
-* **Caching** of results
+- **Caching** of results
 
 --
 
-* Ease of **parallelization**
+- Ease of **parallelization**
 
 --
 
-* **Debugging** tools
+- **Debugging** tools
 
 ---
 

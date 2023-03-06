@@ -220,73 +220,72 @@ experiments, with PCS as the guiding framework.
 # A simulation with MERITS
 
 &lt;span style="font-size: 32pt; font-family: bold"&gt;**M**&lt;/span&gt;**odular**: 
-code and design should be divided into **logical**, **reusable** parts.
+written in **self-contained** and **logically partitioned** segments of code.
 
 --
 
 &lt;span style="font-size: 32pt; font-family: bold"&gt;**E**&lt;/span&gt;**fficient**:
-simulations should take advantage of **distributed computation**.
+**computationally** and **conceptually** streamlined.
 
 --
 
 &lt;span style="font-size: 32pt; font-family: bold"&gt;**R**&lt;/span&gt;**ealistic**:
-simulations should resemble the **real world** as much as possible.
+**faithful** to the **natural world** or **realm of application**, to the best extent allowed by established theory and/or available real-world data.
 
 --
 
 &lt;span style="font-size: 32pt; font-family: bold"&gt;**I**&lt;/span&gt;**ntuitive**:
-simulation architecture should be **readable** and **understandable**.
+**sensible** to both the intended audience and a **broad range** of potential consumers, across all parts of the research product: simulation architecture, documentation, code, and analysis of results.
 
 --
 
 &lt;span style="font-size: 32pt; font-family: bold"&gt;**T**&lt;/span&gt;**ransparent**:
-goals should be **clearly defined**; results communicated **honestly**.
+documented **thoroughly** and **candidly**.
 
 --
 
 &lt;span style="font-size: 32pt; font-family: bold"&gt;**S**&lt;/span&gt;**table**:
-simulations should be **consistent** (e.g., over seeds) and **reproducible**.
+**reproducible/replicable**, and (potentially) **generalizable** beyond the scope of the simulation.
 
 ---
 
 # The `simChef` Vision
 
-
-* Versatile **R framework** to support simulation studies satisfying these MERITS
-
---
-
-* Allow data scientists to focus on substantive questions with **fewer technical distractions**
+- Versatile **R framework** to support simulation studies satisfying these MERITS
 
 --
 
-* **Lower** the **activation barrier** to running high-quality simulation studies
+- Allow data scientists to focus on substantive questions with **fewer technical distractions**
 
 --
 
-* Provide comprehensive simulation **documentation and archive** of simulation artifacts for **transparency and reproducibility**
+- **Lower** the **activation barrier** to running high-quality simulation studies
+
+--
+
+- Provide comprehensive simulation **documentation and archive** of simulation artifacts for **transparency and reproducibility**
 
 ---
 
 # `simChef` Highlights
 
-* An **intuitive grammar** for simulation studies
+- An **intuitive grammar** for simulation studies
 
 --
 
-* Automated **documentation** and **visualization** of results
+- Automated **documentation** and **visualization** of results
 
 --
 
-* **Caching** of results
+- **Caching** of results
 
 --
 
-* Ease of **parallelization**
+- Ease of **parallelization**
 
 --
 
-* **Debugging** tools
+- **Debugging** tools
 
 ---
 
@@ -902,12 +901,10 @@ rlang::last_error()$partial_results
 ```
 
 ```
-## # A tibble: 3 × 5
+## # A tibble: 1 × 5
 ##   .rep  .dgp_name .method_name fit    coeff    
 ##   &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;        &lt;list&gt; &lt;list&gt;   
 ## 1 1     dense     ols          &lt;lm&gt;   &lt;dbl [5]&gt;
-## 2 2     dense     ols          &lt;lm&gt;   &lt;dbl [5]&gt;
-## 3 3     dense     ols          &lt;lm&gt;   &lt;dbl [5]&gt;
 ```
 
 ---
