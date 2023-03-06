@@ -19,7 +19,10 @@ pre[class] {
 .remark-slide-scaler { overflow-y: auto; }
 
 ul { list-style-type: circle; }
+
 li { padding: 3px 0; }
+
+.more-list-spacing li { padding: 20px 0; }
 
 h3 { margin-bottom: 1rem; }
 

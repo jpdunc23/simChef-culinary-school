@@ -4,7 +4,7 @@
     <title>simChef culinary school 🍳</title>
     <meta charset="utf-8" />
     <meta name="author" content="James Duncan, Tiffany Tang" />
-    <script src="libs/header-attrs-2.16/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.19/header-attrs.js"></script>
     <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view-0.2.6/tile-view.js"></script>
     <link href="libs/animate.css-3.7.2/animate.xaringan.css" rel="stylesheet" />
@@ -248,43 +248,38 @@ documented **thoroughly** and **candidly**.
 **reproducible/replicable**, and (potentially) **generalizable** beyond the scope of the simulation.
 
 ---
+class: more-list-spacing
 
 # The `simChef` Vision
 
 - Versatile **R framework** to support simulation studies satisfying these MERITS
 
 --
-
 - Allow data scientists to focus on substantive questions with **fewer technical distractions**
 
 --
-
 - **Lower** the **activation barrier** to running high-quality simulation studies
 
 --
-
 - Provide comprehensive simulation **documentation and archive** of simulation artifacts for **transparency and reproducibility**
 
 ---
+class: more-list-spacing
 
 # `simChef` Highlights
 
 - An **intuitive grammar** for simulation studies
 
 --
-
 - Automated **documentation** and **visualization** of results
 
 --
-
 - **Caching** of results
 
 --
-
 - Ease of **parallelization**
 
 --
-
 - **Debugging** tools
 
 ---
@@ -577,7 +572,7 @@ my_results &lt;- fit_experiment( # or my_exper$fit(...)
 ```
 
 ```
-## 25 reps completed (totals: 25/25) | time taken: 0.688152 minutes
+## 25 reps completed (totals: 25/25) | time taken: 0.342970 minutes
 ```
 
 ```
@@ -807,7 +802,7 @@ n_cores
 
 ```
 ## system 
-##      8
+##     16
 ```
 
 ```r
@@ -819,11 +814,29 @@ results &lt;- run_experiment(experiment, n_reps = 3)
 
 ```
 ## Fitting exper...
-## 3 reps completed (totals: 3/3) | time taken: 0.188166 minutes
+```
+
+```
+## 3 reps completed (totals: 3/3) | time taken: 0.199876 minutes
+```
+
+```
 ## ==============================
+```
+
+```
 ## No evaluators to evaluate. Skipping evaluation.
+```
+
+```
 ## ==============================
+```
+
+```
 ## No visualizers to visualize. Skipping visualization.
+```
+
+```
 ## ==============================
 ```
 
@@ -883,15 +896,13 @@ results &lt;- run_experiment(experiment, n_reps = 3)
 ## The above error occurred while processing "elnet" with the following params:
 ##  $ alpha    : num 0.1
 ##  $ data_list:List of 3
-##   ..$ X    : num [1:100, 1:5] -0.149 2.619 0.257 1.02 -0.78 ...
+##   ..$ X    : num [1:100, 1:5] 0.131 1.686 0.325 1.628 -1.053 ...
 ##   .. ..- attr(*, "dimnames")=List of 2
-##   ..$ y    : num [1:100, 1] -9.38 1.45 -6.55 -6.32 -11.66 ...
+##   ..$ y    : num [1:100, 1] -7.7786 0.0333 -6.9508 -3.6844 -12.2912 ...
 ##   ..$ coeff: num [1:5] 3 -1 0.1 0.01 0.001
 ##  $ .simplify: logi FALSE
 ## 
-## Run `rlang::last_error()$partial_results`to return partial simulation results.
-## Run `rlang::last_error()$errors` to inspect each error, along with the params,
-##   `DGP`, `Method`, and inputs/outputs before the error occurred.
+## Use `rlang::last_error()$partial_results`to return partial simulation results and `rlang::last_error()$errors` to get simulation errors with the `DGP`, `Method`, and params that led to the error.
 ```
 
 --
@@ -901,10 +912,12 @@ rlang::last_error()$partial_results
 ```
 
 ```
-## # A tibble: 1 × 5
+## # A tibble: 3 × 5
 ##   .rep  .dgp_name .method_name fit    coeff    
 ##   &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;        &lt;list&gt; &lt;list&gt;   
 ## 1 1     dense     ols          &lt;lm&gt;   &lt;dbl [5]&gt;
+## 2 2     dense     ols          &lt;lm&gt;   &lt;dbl [5]&gt;
+## 3 3     dense     ols          &lt;lm&gt;   &lt;dbl [5]&gt;
 ```
 
 ---

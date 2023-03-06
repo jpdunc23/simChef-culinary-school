@@ -195,43 +195,38 @@ documented **thoroughly** and **candidly**.
 **reproducible/replicable**, and (potentially) **generalizable** beyond the scope of the simulation.
 
 ---
+class: more-list-spacing
 
 # The `simChef` Vision
 
 - Versatile **R framework** to support simulation studies satisfying these MERITS
 
 --
-
 - Allow data scientists to focus on substantive questions with **fewer technical distractions**
 
 --
-
 - **Lower** the **activation barrier** to running high-quality simulation studies
 
 --
-
 - Provide comprehensive simulation **documentation and archive** of simulation artifacts for **transparency and reproducibility**
 
 ---
+class: more-list-spacing
 
 # `simChef` Highlights
 
 - An **intuitive grammar** for simulation studies
 
 --
-
 - Automated **documentation** and **visualization** of results
 
 --
-
 - **Caching** of results
 
 --
-
 - Ease of **parallelization**
 
 --
-
 - **Debugging** tools
 
 ---
