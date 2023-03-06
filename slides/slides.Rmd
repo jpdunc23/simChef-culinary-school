@@ -556,7 +556,7 @@ dense_dgp_fun <- function(n=100, rho=0.5, noise_level=1) {
   cov_mat[cov_mat == 0] <- rho
   X <- MASS::mvrnorm(n = n, mu = rep(0, 5), Sigma = cov_mat)
   y <- cbind(1, X) %*% c(-8, 3, -1, 0.1, 0.5, 1) + rnorm(n, sd = noise_level)
-  return(list(X = X, y = y, coeff = c(3, -1, 0.1, 0.01, 0.001)))
+  return(list(X = X, y = y, coeff = c(3, -1, 0.1, 0.5, 1)))
 }
 ```
 
@@ -669,6 +669,7 @@ results <- run_experiment(experiment, n_reps = 3)
 --
 ```{r}
 rlang::last_error()$partial_results
+rlang::last_error()$errors
 ```
 
 ---
@@ -837,21 +838,24 @@ results <- fit_experiment(experiment, n_reps = 100)
 
 # Roadmap of ongoing and future work
 
-In approximate order of priority.
-
 --
 - Ongoing usability improvements for `simChef`
 
 --
-- Much more work on `dgpoix`
+- Integration with `testthat` for unit testing of custom simulation functions.
 
 --
-- Nested parallelism, e.g.: 
+- More flexible and nested parallelism, e.g.: 
 
 ```{r eval=FALSE}
 future::plan(future.batchtools::batchtools_slurm,
              future::multisession)
+
+run_experiment(my_exper, parallel_strategy = c("dgps", "reps"))
 ```
+
+--
+- Much more work on `dgpoix`
 
 --
 - Your requests? [github.com/Yu-Group/simChef/issues](https://github.com/Yu-Group/simChef/issues)
